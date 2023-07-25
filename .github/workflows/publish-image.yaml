@@ -13,3 +13,4 @@ jobs:
         run: |
           docker login --username tnioa --password ${{ secrets.GH_PAT }} ghcr.io
           docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions
+          docker push ghcr.io/tnioa/auto-registry-push-with-actions
