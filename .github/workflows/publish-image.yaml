@@ -13,6 +13,7 @@ jobs:
       - name: Build and push the image
         run: |
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           docker login --username tnioa --password ${{ secrets.GH_PAT }} ghcr.io
           docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:$VERSION
           docker push ghcr.io/tnioa/auto-registry-push-with-actions:$VERSION
