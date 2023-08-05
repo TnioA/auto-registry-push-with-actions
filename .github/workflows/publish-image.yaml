@@ -9,8 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set env
+        run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
       - name: Build and push the image
         run: |
           docker login --username tnioa --password ${{ secrets.GH_PAT }} ghcr.io
-          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions
-          docker push ghcr.io/tnioa/auto-registry-push-with-actions
+          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:$RELEASE_VERSION
+          docker push ghcr.io/tnioa/auto-registry-push-with-actions:$RELEASE_VERSION
