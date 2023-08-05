@@ -3,21 +3,16 @@ name: Docker Image CI for GHCR
 on: 
   push:
     branches: [ main ]
-
+    tags:
+      - v*
 jobs: 
   build_and_publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.64.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-          WITH_V: false
       - name: Build and push the image
         run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           docker login --username tnioa --password ${{ secrets.GH_PAT }} ghcr.io
-          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:${{ steps.bump_version.outputs.version }}
-          docker push ghcr.io/tnioa/auto-registry-push-with-actions:${{ steps.bump_version.outputs.version }}
+          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:$VERSION
+          docker push ghcr.io/tnioa/auto-registry-push-with-actions:$VERSION
