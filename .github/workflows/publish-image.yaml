@@ -9,13 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Create new tag
-        uses: anothrNick/github-tag-action@1.67.0
-        with:
-          tag: ${{ steps.bump_version.outputs.version }}
-          message: 'New version'
-      - name: Build and push the image
-        run: |
-          docker login --username tnioa --password ${{ secrets.GH_PAT }} ghcr.io
-          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:${{ steps.bump_version.outputs.version }}
-          docker push ghcr.io/tnioa/auto-registry-push-with-actions:${{ steps.bump_version.outputs.version }}
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+          WITH_V: false
