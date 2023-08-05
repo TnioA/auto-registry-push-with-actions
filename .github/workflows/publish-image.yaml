@@ -3,19 +3,14 @@ name: Docker Image CI for GHCR
 on: 
   push:
     branches: [ main ]
+
 jobs: 
   build_and_publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Get the latest tag
-        id: get_latest_tag
-        run: echo ::set-output name=tag::$(git describe --abbrev=0 --tags)
-      - name: Increment tag version
-        id: increment_tag
-        run: echo ::set-output name=tag::$(echo ${{ steps.get_latest_tag.outputs.tag }} | awk -F. -v OFS=. '{$NF = $NF + 1;} 1')
       - name: Build and push the image
         run: |
           docker login --username tnioa --password ${{ secrets.GH_PAT }} ghcr.io
-          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:${{ steps.increment_tag.outputs.tag }}
-          docker push ghcr.io/tnioa/auto-registry-push-with-actions:${{ steps.increment_tag.outputs.tag }}
+          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:${{ github.ref }}
+          docker push ghcr.io/tnioa/auto-registry-push-with-actions:${{ github.ref }}
