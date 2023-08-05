@@ -3,7 +3,7 @@ name: Docker Image CI for GHCR
 on: 
   push:
     branches: [ main ]
-    
+
 jobs: 
   build_and_publish:
     runs-on: ubuntu-latest
@@ -12,5 +12,5 @@ jobs:
       - name: Build and push the image
         run: |
           docker login --username tnioa --password ${{ secrets.GH_TOKEN }} ghcr.io
-          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:${{ github.run_number }}
-          docker push ghcr.io/tnioa/auto-registry-push-with-actions:${{ github.run_number }}
+          docker build . --tag ghcr.io/tnioa/auto-registry-push-with-actions:1.0.${{ github.run_number }}
+          docker push ghcr.io/tnioa/auto-registry-push-with-actions:1.0.${{ github.run_number }}
