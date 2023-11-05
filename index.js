@@ -26,10 +26,12 @@ const server = createServer(async (req, res) => {
 
     if (urlparse.pathname == '/' && req.method == 'GET')
         return BuildResponse(res, { status: "OK", success: true });
+    if (urlparse.pathname == '/' && req.method == 'POST')
+        return BuildResponse(res, { status: "OK", data: req.body, success: true });
     else 
         return BuildResponse(res, { error: "Route not found" });
 });
 
-server.listen(5000, function () {
+server.listen(5000, () => {
     console.log('The server has started at port ' + 5000);
 });
